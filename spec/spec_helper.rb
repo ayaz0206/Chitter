@@ -4,10 +4,12 @@
 # loaded once.
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
-
 ENV["RACK_ENV"] = 'test'
-require './chitter'
+require './chitter' 
 require 'database_cleaner'
+require 'capybara/rspec'
+
+Capybara.app = Sinatra::Application
 
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true
@@ -20,19 +22,17 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = 'random'
 
-		RSpec.configure do |config|
-			config.before(:suite) do
-				DatabaseCleaner.strategy = :transaction
-				DatabaseCleaner.clean_with(:truncation)
-			end
+	config.before(:suite) do
+		DatabaseCleaner.strategy = :transaction
+		DatabaseCleaner.clean_with(:truncation)
+	end
 
-			config.before(:each) do
-				DatabaseCleaner.start 
-			end
+	config.before(:each) do
+		DatabaseCleaner.start 
+	end
 
-			config.after(:each) do
-				DatabaseCleaner.clean 
-			end
+	config.after(:each) do
+		DatabaseCleaner.clean 
+	end
 
-  			
 end
